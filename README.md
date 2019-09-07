@@ -1,6 +1,8 @@
 # flutter_course_todo
 
-A new Flutter project.
+A TODO App.  
+
+[Prototype created on Figma](https://www.figma.com/file/MjdfI8kseCDoZ1qgsJScPY/TODO?node-id=0%3A1)
 
 ## Getting Started
 
