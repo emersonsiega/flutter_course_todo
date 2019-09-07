@@ -20,11 +20,16 @@ class Task extends StatefulWidget {
 
 class _TaskState extends State<Task> {
   TextEditingController _controller;
+  FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    
     _controller = TextEditingController(text: widget.description);
+    Future.delayed(Duration.zero, () {
+      FocusScope.of(context).requestFocus(_focusNode);
+    });
   }
 
   @override
@@ -50,6 +55,7 @@ class _TaskState extends State<Task> {
           Expanded(
             child: TextField(
               controller: _controller,
+              focusNode: _focusNode,
               decoration: InputDecoration(
                 hintText: "O que deve ser feito?",
               ),
