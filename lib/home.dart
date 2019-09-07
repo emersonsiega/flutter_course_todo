@@ -1,7 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_course_todo/models/task_model.dart';
 import 'package:flutter_course_todo/task.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  List<TaskModel> _tasks;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _tasks = [
+      TaskModel(),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,9 +27,8 @@ class Home extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.clear_all),
-            onPressed: () {
-              // TODO: Limpar todos os completos
-            },
+            onPressed: _clearCompleted,
+            tooltip: "Limpar concluídos",
           ),
         ],
       ),
@@ -21,28 +37,57 @@ class Home extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Task(
-              toggleComplete: () {
-                
-              },
-              completed: true,
-              description: "Comprar pão!",
-            ),
-            Task(
-              toggleComplete: () {},
-              completed: false,
-              description: "",
-            ),
-          ],
+          children: _tasks
+              .map(
+                (task) => Task(
+                  // key: Key(task.id.toString()),
+                  toggleComplete: () {
+                    task.completed = !task.completed;
+
+                    _updateTask(task);
+                  },
+                  onChangeDescription: (description) {
+                    task.description = description;
+
+                    _updateTask(task);
+                  },
+                  completed: task.completed,
+                  description: task.description,
+                ),
+              )
+              .toList(),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {
-          // TODO: Adicionar nova task
-        },
+        onPressed: _addTask,
       ),
     );
+  }
+
+  void _updateTask(TaskModel task) {
+    setState(() {
+      _tasks.map((oldTask) {
+        if (oldTask.id == task.id) {
+          return task;
+        }
+
+        return oldTask;
+      });
+    });
+  }
+
+  void _addTask() {
+    if (_tasks.length == 0 || _tasks.last.description.isNotEmpty) {
+      setState(() {
+        _tasks.add(TaskModel());
+      });
+    }
+  }
+
+  void _clearCompleted() {
+    setState(() {
+      _tasks = _tasks.where((task) => !task.completed).toList();
+    });
   }
 }

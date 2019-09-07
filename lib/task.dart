@@ -4,12 +4,15 @@ class Task extends StatefulWidget {
   final bool completed;
   final String description;
   final Function toggleComplete;
+  final Function onChangeDescription;
 
   Task({
+    Key key,
     this.completed: false,
     this.description: '',
     @required this.toggleComplete,
-  });
+    @required this.onChangeDescription,
+  }) : super(key: key);
 
   @override
   _TaskState createState() => _TaskState();
@@ -48,8 +51,15 @@ class _TaskState extends State<Task> {
             child: TextField(
               controller: _controller,
               decoration: InputDecoration(
-                hintText: "O que deve ser feito?"
+                hintText: "O que deve ser feito?",
               ),
+              style: TextStyle(
+                color: widget.completed ? Colors.grey : Colors.white,
+              ),
+              maxLines: 1,
+              enabled: !widget.completed,
+              onChanged: widget.onChangeDescription,
+              keyboardAppearance: Brightness.dark,
             ),
           ),
         ],
