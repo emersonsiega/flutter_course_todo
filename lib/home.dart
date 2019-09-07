@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
           children: _tasks
               .map(
                 (task) => Task(
-                  // key: Key(task.id.toString()),
+                  key: Key(task.id.toString()),
                   toggleComplete: () {
                     task.completed = !task.completed;
 
